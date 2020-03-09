@@ -50,12 +50,20 @@ class DDBenchmark(Benchmark):
         self.pre()
 
         for bs_count in self.bs_count_list:
+            speeds = []
+            bs = bs_count[0]
+            count = bs_count[1]
             for r in range(self.repeat):
-                bs = bs_count[0]
-                count = bs_count[1]
                 _, output = self.wrapper.dd("/dev/zero", "benchmark", bs, count)
-                self.result.append(
-                    {"setup": {"repeat": self.repeat, "run": r, "bs": bs, "count": count}, "result": output})
+
+                regex_speed = r"([0-9,]*) MB\/s"
+                match_speed = re.findall(regex_speed, output, re.MULTILINE)
+
+                if match_speed:
+                    speeds.append(float(str(match_speed[0]).replace(",", ".")))
+            self.result.append(
+                {"setup": {"repeat": self.repeat, "runs": self.repeat, "bs": bs, "count": count},
+                 "result [MB/s]": statistics.mean(speeds)})
         os.remove('benchmark')
 
         self.post()
