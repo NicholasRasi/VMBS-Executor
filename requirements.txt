@@ -1,0 +1,5 @@
+coloredlogs
+sh
+ai-benchmark
+tensorflow
+flask
