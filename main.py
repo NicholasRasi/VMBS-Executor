@@ -28,13 +28,13 @@ dd_benchmark.set_bs_count([("512MB", 1), ("512", 1000)])
 benchmarks.append(dd_benchmark)
 # download benchmark
 download_benchmark = DownloadBenchmark(repeat=1, logger=logger)
-#benchmarks.append(download_benchmark)
+benchmarks.append(download_benchmark)
 # simple CPU
 cpu_benchmark = CPUBenchmark(repeat=100, logger=logger)
 benchmarks.append(cpu_benchmark)
 # ai benchmark
 ai_benchmark = AIABenchmark(repeat=1, logger=logger, type="micro")
-#benchmarks.append(ai_benchmark)
+benchmarks.append(ai_benchmark)
 # sysbenchmark
 sys_benchmark = SysBenchmark(repeat=1, logger=logger)
 benchmarks.append(sys_benchmark)
