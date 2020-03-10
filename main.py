@@ -40,7 +40,7 @@ sys_benchmark = SysBenchmark(repeat=1, logger=logger)
 benchmarks.append(sys_benchmark)
 # web server benchmark
 web_benchmark = WebServerBenchmark(repeat=1, logger=logger)
-#benchmarks.append(web_benchmark)
+benchmarks.append(web_benchmark)
 
 for benchmark in benchmarks:
     benchmark_results.append({"name": benchmark.name, "results": benchmark.run()})

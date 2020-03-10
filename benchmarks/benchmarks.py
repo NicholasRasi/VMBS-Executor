@@ -144,18 +144,18 @@ class SysBenchmark(Benchmark):
 
     def run(self):
         self.pre()
-        sysbench = Sysbench()
+        sysbench = Sysbench(return_full_output=True)
         for r in range(self.repeat):
-            retcode_cpu, output_cpu = sysbench.cpu(2000)
-            retcode_memory, output_memory = sysbench.memory("1M", "10G")
-            retcode_threads, output_threads = sysbench.threads(10, 128)
-            retcode_fileio, output_fileio = sysbench.fileio("1GB", "rndrw", 60, 0)
+            output_cpu = sysbench.cpu(2000)
+            output_memory = sysbench.memory("1M", "10G")
+            output_threads = sysbench.threads(10, 128)
+            output_fileio = sysbench.fileio("1GB", "rndrw", 60, 0)
 
             self.result.append({"setup": {"run": r, "repeat": self.repeat},
-                                "result": {"cpu": {"retcode": retcode_cpu, "output": output_cpu},
-                                           "memory": {"retcode": retcode_memory, "output": output_memory},
-                                           "threads": {"retcode": retcode_threads, "output": output_threads},
-                                           "fileio": {"retcode": retcode_fileio, "output": output_fileio}}})
+                                "result": {"cpu": {"output": output_cpu},
+                                           "memory": {"output": output_memory},
+                                           "threads": {"output": output_threads},
+                                           "fileio": {"output": output_fileio}}})
 
         self.post()
         return self.result
