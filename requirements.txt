@@ -4,3 +4,4 @@ ai-benchmark
 tensorflow
 flask
 gunicorn
+pyyaml

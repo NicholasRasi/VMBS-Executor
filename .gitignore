@@ -136,3 +136,5 @@ dmypy.json
 
 .idea/
 other/
+config.yml
+bin-id.txt
