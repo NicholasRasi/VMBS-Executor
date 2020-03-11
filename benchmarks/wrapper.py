@@ -63,3 +63,16 @@ class Wrapper:
             return None
 
         return retcode, str(output)
+
+    def bash(self, exec_file):
+        """
+        Wrapper for the bash command.
+        """
+        try:
+            output = sh.bash(exec_file)
+            retcode = output.exit_code
+        except Exception as e:
+            self.logger.error("exception: " + str(e))
+            return None
+
+        return retcode, str(output)

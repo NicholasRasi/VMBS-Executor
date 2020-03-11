@@ -4,7 +4,8 @@ import logging
 import coloredlogs
 import argparse
 import requests
-from benchmarks.benchmarks import DDBenchmark, DownloadBenchmark, CPUBenchmark, AIABenchmark, SysBenchmark, WebServerBenchmark
+from benchmarks.benchmarks import DDBenchmark, DownloadBenchmark, CPUBenchmark, AIABenchmark, SysBenchmark, \
+    WebServerBenchmark, NenchBenchmark
 from benchmarks.server import Server
 
 coloredlogs.install(level='INFO', milliseconds=False)
@@ -15,7 +16,6 @@ logger.info("Start cloud benchmark")
 parser = argparse.ArgumentParser()
 parser.add_argument('--bin', type=str, required=True)
 args = parser.parse_args()
-
 
 benchmark_results = []
 benchmarks = []
@@ -41,6 +41,9 @@ benchmarks.append(sys_benchmark)
 # web server benchmark
 web_benchmark = WebServerBenchmark(repeat=1, logger=logger)
 benchmarks.append(web_benchmark)
+# nench benchmark
+nench_benchmark = NenchBenchmark(repeat=1, logger=logger)
+benchmarks.append(nench_benchmark)
 
 for benchmark in benchmarks:
     benchmark_results.append({"name": benchmark.name, "results": benchmark.run()})

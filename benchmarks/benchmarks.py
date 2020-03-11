@@ -24,7 +24,7 @@ class Benchmark:
         raise NotImplementedError
 
     def post(self):
-        self.logger.info(self.name + " results: " + str(self.result))
+        self.logger.info("Benchmark " + self.name + " finished")
 
 
 class DDBenchmark(Benchmark):
@@ -162,6 +162,9 @@ class SysBenchmark(Benchmark):
 
 
 class WebServerBenchmark(Benchmark):
+    """
+    https://github.com/wg/wrk
+    """
     name = 'web-benchmark'
 
     def run(self):
@@ -180,5 +183,24 @@ class WebServerBenchmark(Benchmark):
 
             self.result.append({"setup": {"run": r, "repeat": self.repeat},
                                 "result": {"retcode": retcode, "output": output}})
+        self.post()
+        return self.result
+
+
+class NenchBenchmark(Benchmark):
+    """
+    https://github.com/n-st/nench
+    """
+    name = 'nench-benchmark'
+
+    def run(self):
+        self.pre()
+
+        for r in range(self.repeat):
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            retcode, output = self.wrapper.bash(dir_path + "/nench/nench.sh")
+            self.result.append({"setup": {"run": r, "repeat": self.repeat},
+                                "result": {"retcode": retcode, "output": output}})
+
         self.post()
         return self.result

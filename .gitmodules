@@ -4,3 +4,6 @@
 [submodule "benchmarks/python_sysbench"]
 	path = benchmarks/python_sysbench
 	url = https://github.com/NicholasRasi/python_sysbench.git
+[submodule "benchmarks/nench"]
+	path = benchmarks/nench
+	url = https://github.com/n-st/nench.git
