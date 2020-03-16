@@ -5,6 +5,7 @@ import coloredlogs
 import argparse
 import requests
 import yaml
+import datetime
 from benchmarks.benchmarks import DDBenchmark, DownloadBenchmark, CPUBenchmark, AIABenchmark, SysBenchmark, \
     WebServerBenchmark, NenchBenchmark
 from benchmarks.server import Server
@@ -21,7 +22,7 @@ args = parser.parse_args()
 if args.bin:
     bin_id = args.bin
 else:
-    f = open("bin-id.txt", "r")
+    f = open("bin_id.txt", "r")
     bin_id = (f.read())
 
 with open("config.yml", 'r') as file:
@@ -64,7 +65,10 @@ for benchmark in benchmarks:
 
 end = time.time()
 
-benchmark_result = {"duration": end - start, "server": Server.get_all(), "benchmarks": benchmark_results}
+benchmark_result = {"time": str(datetime.datetime.now()),
+                    "duration": end - start,
+                    "server": Server.get_all(),
+                    "benchmarks": benchmark_results}
 logging.info("Sending payload: " + json.dumps(benchmark_result) + " to " + sending_bin)
 
 response = requests.post(sending_bin, benchmark_result)

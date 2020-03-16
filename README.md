@@ -18,7 +18,8 @@ python main.py
     - memory
     - threads
     - fileio
-- [**nench**](https://github.com/n-st/nench)
+- [**nench**](https://github.com/n-st/nench): VPS benchmark script — based on the popular bench.sh, plus CPU and ioping tests, and dual-stack IPv4 and v6 speedtests by default
+
 
 ### Hardware Specific
 #### CPU
