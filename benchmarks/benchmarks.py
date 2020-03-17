@@ -102,8 +102,8 @@ class CPUBenchmark(Benchmark):
                     product *= sin(angle) ** 2 + cos(angle) ** 2
             end = time.time()
             durations.append(end - start)
-            self.result.append({"setup": {"run": r, "repeat": self.repeat},
-                                "result": statistics.mean(durations)})
+        self.result.append({"setup": {"repeat": self.repeat},
+                            "result": statistics.mean(durations)})
         self.post()
         return self.result
 

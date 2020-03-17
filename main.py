@@ -29,7 +29,7 @@ with open("config.yml", 'r') as file:
     data = file.read()
     config = yaml.load(data, Loader=yaml.FullLoader)
 
-sending_bin = config["bin_database_url"] + "/" + bin_id
+sending_bin = config["bin_database_url"] + "/" + str(bin_id).strip()
 logging.info("Sendind data to: " + sending_bin)
 
 benchmark_results = []
@@ -40,25 +40,25 @@ start = time.time()
 # dd benchmark
 dd_benchmark = DDBenchmark(repeat=2, logger=logger)
 dd_benchmark.set_bs_count([("512MB", 1), ("512", 1000)])
-benchmarks.append(dd_benchmark)
+#benchmarks.append(dd_benchmark)
 # download benchmark
 download_benchmark = DownloadBenchmark(repeat=1, logger=logger)
-benchmarks.append(download_benchmark)
+#benchmarks.append(download_benchmark)
 # simple CPU
-cpu_benchmark = CPUBenchmark(repeat=100, logger=logger)
-benchmarks.append(cpu_benchmark)
+cpu_benchmark = CPUBenchmark(repeat=1, logger=logger)
+#benchmarks.append(cpu_benchmark)
 # ai benchmark
 ai_benchmark = AIABenchmark(repeat=1, logger=logger, type="micro")
-benchmarks.append(ai_benchmark)
+#benchmarks.append(ai_benchmark)
 # sysbenchmark
 sys_benchmark = SysBenchmark(repeat=1, logger=logger)
-benchmarks.append(sys_benchmark)
+#benchmarks.append(sys_benchmark)
 # web server benchmark
 web_benchmark = WebServerBenchmark(repeat=1, logger=logger)
-benchmarks.append(web_benchmark)
+#benchmarks.append(web_benchmark)
 # nench benchmark
 nench_benchmark = NenchBenchmark(repeat=1, logger=logger)
-benchmarks.append(nench_benchmark)
+#benchmarks.append(nench_benchmark)
 
 for benchmark in benchmarks:
     benchmark_results.append({"name": benchmark.name, "results": benchmark.run()})
@@ -69,7 +69,8 @@ benchmark_result = {"time": str(datetime.datetime.now()),
                     "duration": end - start,
                     "server": Server.get_all(),
                     "benchmarks": benchmark_results}
-logging.info("Sending payload: " + json.dumps(benchmark_result) + " to " + sending_bin)
 
-response = requests.post(sending_bin, benchmark_result)
+payload = json.dumps(benchmark_result)
+logging.info("Sending payload: " + payload + " to " + sending_bin)
+response = requests.post(sending_bin, payload, headers={'content-type': 'application/json'})
 logging.info(response)
