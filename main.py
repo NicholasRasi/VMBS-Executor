@@ -60,8 +60,12 @@ logger.info("Benchmark list: " + ", ".join([benchmark.name for benchmark in benc
 start = time.time()
 for benchmark in benchmarks_list:
     try:
-        benchmark_results.append({"name": benchmark.name, "setup": benchmark.get_setup(), "results": benchmark.run()})
+        result = benchmark.run()
+        benchmark_results.append({"name": benchmark.name, "setup": benchmark.get_setup(),
+                                  "result": result, "completed": True})
     except Exception as e:
+        benchmark_results.append({"name": benchmark.name, "setup": benchmark.get_setup(),
+                                  "result": str(e), "completed": False})
         logger.error(str(e))
 end = time.time()
 
