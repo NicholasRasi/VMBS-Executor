@@ -11,8 +11,8 @@ from benchmarks.benchmarks import get_benchmark_class
 from benchmarks.server import Server
 
 # setup logger
-coloredlogs.install(level='INFO', milliseconds=False)
-logger = logging.getLogger("cloud-benchmark")
+logger = logging.getLogger(__name__)
+coloredlogs.install(level='DEBUG', milliseconds=False, logger=logger)
 logger.info("Start cloud benchmark")
 
 # parse arguments
@@ -34,7 +34,7 @@ with open("config.yml", 'r') as file:
 
 # setup bin url
 sending_bin = config["bin_database_url"] + "/" + str(bin_id).strip()
-logging.info("Sendind data to: " + sending_bin)
+logger.info("Sendind data to: " + sending_bin)
 
 benchmark_results = []
 benchmarks_list = []
@@ -59,7 +59,10 @@ logger.info("Benchmark list: " + ", ".join([benchmark.name for benchmark in benc
 # start running benchmarks
 start = time.time()
 for benchmark in benchmarks_list:
-    benchmark_results.append({"name": benchmark.name, "setup": benchmark.get_setup(), "results": benchmark.run()})
+    try:
+        benchmark_results.append({"name": benchmark.name, "setup": benchmark.get_setup(), "results": benchmark.run()})
+    except Exception as e:
+        logger.error(str(e))
 end = time.time()
 
 # build payload
