@@ -8,6 +8,8 @@ from .python_sysbench import Sysbench
 
 
 class Benchmark:
+    error_code = 400
+    succ_code = 0
     name = None
 
     def __init__(self, logger):
@@ -46,9 +48,12 @@ class DDBenchmark(Benchmark):
     def run(self):
         self.pre()
 
-        retcode, output = self.wrapper.dd("/dev/zero", "benchmark", self.setup["bs"], self.setup["count"])
+        try:
+            retcode, output = self.wrapper.dd("/dev/zero", "benchmark", self.setup["bs"], self.setup["count"])
+            os.remove('benchmark')
+        except Exception as e:
+            retcode, output = self.error_code, str(e)
         self.result = {"retcode": retcode, "output": output}
-        os.remove('benchmark')
 
         self.post()
         return self.result
@@ -63,7 +68,10 @@ class DownloadBenchmark(Benchmark):
     def run(self):
         self.pre()
 
-        retcode, output = self.wrapper.curl("/dev/null", self.setup["url"])
+        try:
+            retcode, output = self.wrapper.curl("/dev/null", self.setup["url"])
+        except Exception as e:
+            retcode, output = self.error_code, str(e)
         self.result = {"retcode": retcode, "output": output}
 
         self.post()
@@ -80,16 +88,20 @@ class CPUBenchmark(Benchmark):
     def run(self):
         self.pre()
 
-        durations = []
-        start = time.time()
-        product = 1.0
-        for counter in range(1, 1000, 1):
-            for dex in list(range(1, 360, 1)):
-                angle = radians(dex)
-                product *= sin(angle) ** 2 + cos(angle) ** 2
-        end = time.time()
-        durations.append(end - start)
-        self.result = statistics.mean(durations)
+        try:
+            durations = []
+            start = time.time()
+            product = 1.0
+            for counter in range(1, 1000, 1):
+                for dex in list(range(1, 360, 1)):
+                    angle = radians(dex)
+                    product *= sin(angle) ** 2 + cos(angle) ** 2
+            end = time.time()
+            durations.append(end - start)
+            retcode, output = self.succ_code, statistics.mean(durations)
+        except Exception as e:
+            retcode, output = self.error_code, str(e)
+        self.result = {"retcode": retcode, "output": output}
 
         self.post()
         return self.result
@@ -105,18 +117,22 @@ class AIABenchmark(Benchmark):
     def run(self):
         self.pre()
 
-        benchmark = AIBenchmark()
-        if self.setup["type"] == "inference":
-            ai_results = benchmark.run_inference()
-        elif self.setup["type"] == "training":
-            ai_results = benchmark.run_training()
-        elif self.setup["type"] == "micro":
-            ai_results = benchmark.run_micro()
-        else:
-            ai_results = benchmark.run()
-        self.result = {"ai_score": ai_results.ai_score,
-                       "inference_score": ai_results.inference_score,
-                       "training_score": ai_results.training_score}
+        try:
+            benchmark = AIBenchmark()
+            if self.setup["type"] == "inference":
+                ai_results = benchmark.run_inference()
+            elif self.setup["type"] == "training":
+                ai_results = benchmark.run_training()
+            elif self.setup["type"] == "micro":
+                ai_results = benchmark.run_micro()
+            else:
+                ai_results = benchmark.run()
+            self.result = {"retcode": self.succ_code,
+                           "output": {"ai_score": ai_results.ai_score,
+                                      "inference_score": ai_results.inference_score,
+                                      "training_score": ai_results.training_score}}
+        except Exception as e:
+            self.result = {"retcode": self.error_code, "output": str(e)}
 
         self.post()
         return self.result
@@ -127,18 +143,22 @@ class SysBenchmark(Benchmark):
 
     def run(self):
         self.pre()
-        sysbench = Sysbench(return_full_output=True)
+        try:
+            sysbench = Sysbench(return_full_output=True)
 
-        output_cpu = sysbench.cpu(self.setup["cpu_max_prime"])
-        output_memory = sysbench.memory(self.setup["mem_block_size"], self.setup["mem_total_size"])
-        output_threads = sysbench.threads(self.setup["threads_max_time"], self.setup["threads_num"])
-        output_fileio = sysbench.fileio(self.setup["file_total_size"], self.setup["file_test_mode"],
-                                        self.setup["file_max_time"], self.setup["file_max_requests"])
+            output_cpu = sysbench.cpu(self.setup["cpu_max_prime"])
+            output_memory = sysbench.memory(self.setup["mem_block_size"], self.setup["mem_total_size"])
+            output_threads = sysbench.threads(self.setup["threads_max_time"], self.setup["threads_num"])
+            output_fileio = sysbench.fileio(self.setup["file_total_size"], self.setup["file_test_mode"],
+                                            self.setup["file_max_time"], self.setup["file_max_requests"])
+            self.result = {"retcode": self.succ_code,
+                           "output": {"cpu": {"output": output_cpu},
+                                      "memory": {"output": output_memory},
+                                      "threads": {"output": output_threads},
+                                      "fileio": {"output": output_fileio}}}
+        except Exception as e:
+            self.result = {"retcode": self.error_code, "output": str(e)}
 
-        self.result = {"cpu": {"output": output_cpu},
-                       "memory": {"output": output_memory},
-                       "threads": {"output": output_threads},
-                       "fileio": {"output": output_fileio}}
         self.post()
         return self.result
 
@@ -152,16 +172,20 @@ class WebServerBenchmark(Benchmark):
     def run(self):
         self.pre()
 
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        web_server = self.wrapper.gunicorn(12, dir_path + "/webserver/", "main:create_app()", bg=True)
-        self.logger.info("Web server started...")
-        time.sleep(12)
-        self.logger.info("Starting load generator...")
-        # run load generator
-        retcode, output = self.wrapper.wrk(self.setup["threads"], self.setup["connections"], self.setup["time"],
-                                           "http://localhost:8000")
-        web_server.terminate()
-        self.logger.info(output)
+        try:
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            web_server = self.wrapper.gunicorn(12, dir_path + "/webserver/", "main:create_app()", bg=True)
+            self.logger.info("Web server started...")
+            time.sleep(12)
+            self.logger.info("Starting load generator...")
+            # run load generator
+            retcode, output = self.wrapper.wrk(self.setup["threads"], self.setup["connections"], self.setup["time"],
+                                               "http://localhost:8000")
+            web_server.terminate()
+            self.logger.info(output)
+        except Exception as e:
+            retcode = self.error_code
+            output = str(e)
         self.result = {"retcode": retcode, "output": output}
 
         self.post()
@@ -177,15 +201,20 @@ class NenchBenchmark(Benchmark):
     def run(self):
         self.pre()
 
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        retcode, output = self.wrapper.bash(dir_path + "/nench/nench.sh")
+        try:
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            retcode, output = self.wrapper.bash(dir_path + "/nench/nench.sh")
+        except Exception as e:
+            retcode, output = self.error_code, str(e)
         self.result = {"retcode": retcode, "output": output}
 
         self.post()
         return self.result
 
+
 def get_benchmark_class(name):
     return list(filter(lambda bench: bench.name == name, BENCHMARKS))[0]
+
 
 BENCHMARKS = [DDBenchmark, DownloadBenchmark, CPUBenchmark, AIABenchmark, SysBenchmark, WebServerBenchmark,
               NenchBenchmark]

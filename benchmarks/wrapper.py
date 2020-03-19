@@ -17,8 +17,8 @@ class Wrapper:
             retcode = output.exit_code
         except Exception as e:
             self.logger.error("exception: " + str(e))
-            retcode = self.error_code
             output = e
+            retcode = self.error_code
 
         return retcode, str(output)
 
@@ -32,8 +32,8 @@ class Wrapper:
             retcode = output.exit_code
         except Exception as e:
             self.logger.error("exception: " + str(e))
-            retcode = self.error_code
             output = e
+            retcode = self.error_code
 
         return retcode, str(output)
 
@@ -49,8 +49,8 @@ class Wrapper:
             retcode = output.exit_code
         except Exception as e:
             self.logger.error("exception: " + str(e))
-            retcode = self.error_code
             output = e
+            retcode = self.error_code
 
         return retcode, str(output)
 
@@ -65,8 +65,8 @@ class Wrapper:
             retcode = output.exit_code
         except Exception as e:
             self.logger.error("exception: " + str(e))
-            retcode = self.error_code
             output = e
+            retcode = self.error_code
 
         return retcode, str(output)
 
@@ -79,7 +79,7 @@ class Wrapper:
             retcode = output.exit_code
         except Exception as e:
             self.logger.error("exception: " + str(e))
-            retcode = self.error_code
             output = e
+            retcode = self.error_code
 
         return retcode, str(output)
