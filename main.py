@@ -61,12 +61,11 @@ start = time.time()
 for benchmark in benchmarks_list:
     try:
         result = benchmark.run()
-        benchmark_results.append({"name": benchmark.name, "setup": benchmark.get_setup(),
-                                  "result": result, "completed": True})
     except Exception as e:
-        benchmark_results.append({"name": benchmark.name, "setup": benchmark.get_setup(),
-                                  "result": str(e), "completed": False})
         logger.error(str(e))
+        result = { "retcode": 400, "result": str(e) }
+    benchmark_results.append({"name": benchmark.name, "setup": benchmark.get_setup(), "result": result})
+
 end = time.time()
 
 # build payload

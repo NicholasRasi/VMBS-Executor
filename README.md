@@ -37,3 +37,11 @@ python main.py
 
 #### Web
 - [**gunicorn**](gunicorn.org/) web server + [**wrk**](https://github.com/wg/wrk): wrk is a modern HTTP benchmarking tool capable of generating significant load when run on a single multi-core CPU
+
+---
+##### Benchmark Return Code
+The result of the benchmark is composed by:
+- return code:
+    - 0: the benchmark exits without errors
+    - otherwise: an error occurred during the execution of the benchmark
+- result: the result of the benchmark

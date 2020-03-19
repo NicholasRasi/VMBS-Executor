@@ -2,6 +2,8 @@ import sh
 
 
 class Wrapper:
+    error_code = 400
+
     def __init__(self, logger):
         self.logger = logger
 
@@ -15,7 +17,8 @@ class Wrapper:
             retcode = output.exit_code
         except Exception as e:
             self.logger.error("exception: " + str(e))
-            return None
+            retcode = self.error_code
+            output = e
 
         return retcode, str(output)
 
@@ -29,7 +32,8 @@ class Wrapper:
             retcode = output.exit_code
         except Exception as e:
             self.logger.error("exception: " + str(e))
-            return None
+            retcode = self.error_code
+            output = e
 
         return retcode, str(output)
 
@@ -45,7 +49,8 @@ class Wrapper:
             retcode = output.exit_code
         except Exception as e:
             self.logger.error("exception: " + str(e))
-            return None
+            retcode = self.error_code
+            output = e
 
         return retcode, str(output)
 
@@ -60,7 +65,8 @@ class Wrapper:
             retcode = output.exit_code
         except Exception as e:
             self.logger.error("exception: " + str(e))
-            return None
+            retcode = self.error_code
+            output = e
 
         return retcode, str(output)
 
@@ -73,6 +79,7 @@ class Wrapper:
             retcode = output.exit_code
         except Exception as e:
             self.logger.error("exception: " + str(e))
-            return None
+            retcode = self.error_code
+            output = e
 
         return retcode, str(output)
