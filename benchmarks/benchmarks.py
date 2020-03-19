@@ -155,7 +155,7 @@ class WebServerBenchmark(Benchmark):
         dir_path = os.path.dirname(os.path.realpath(__file__))
         web_server = self.wrapper.gunicorn(12, dir_path + "/webserver/", "main:create_app()", bg=True)
         self.logger.info("Web server started...")
-        time.sleep(5)
+        time.sleep(12)
         self.logger.info("Starting load generator...")
         # run load generator
         retcode, output = self.wrapper.wrk(self.setup["threads"], self.setup["connections"], self.setup["time"],
