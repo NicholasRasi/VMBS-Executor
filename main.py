@@ -74,8 +74,8 @@ benchmark_result = {"time": str(datetime.datetime.now()),
                     "server": Server.get_all(),
                     "benchmarks": benchmark_results}
 payload = json.dumps(benchmark_result)
-logging.info("Sending payload: " + payload + " to " + sending_bin)
+logger.info("Sending payload: " + payload + " to " + sending_bin)
 
 # send data
 response = requests.post(sending_bin, payload, headers={'content-type': 'application/json'})
-logging.info(response.text)
+logger.info(response.text)
