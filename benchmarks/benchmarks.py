@@ -152,10 +152,10 @@ class SysBenchmark(Benchmark):
             output_fileio = sysbench.fileio(self.setup["file_total_size"], self.setup["file_test_mode"],
                                             self.setup["file_max_time"], self.setup["file_max_requests"])
             self.result = {"retcode": self.succ_code,
-                           "output": {"cpu": {"output": output_cpu},
-                                      "memory": {"output": output_memory},
-                                      "threads": {"output": output_threads},
-                                      "fileio": {"output": output_fileio}}}
+                           "output": {"cpu": output_cpu,
+                                      "memory": output_memory,
+                                      "threads": output_threads,
+                                      "fileio": output_fileio}}
         except Exception as e:
             self.result = {"retcode": self.error_code, "output": str(e)}
 
