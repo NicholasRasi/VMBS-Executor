@@ -1,0 +1,27 @@
+benchmarks:
+  "dd":
+    repeat: 2
+    setup:
+      - { bs: "256MB", count: 1 }
+      - { bs: "512", count: 1000 }
+  "download":
+    repeat: 1
+    setup:
+      - { url: 'http://cachefly.cachefly.net/100mb.test' }
+      - { url: 'https://speed.hetzner.de/1GB.bin' }
+  "simple-cpu":
+    repeat: 1
+    setup:
+      - {}
+  "sys-benchmark":
+    repeat: 1
+    setup:
+      - { cpu_max_prime: 2000, mem_block_size: "1M", mem_total_size: "10G", threads_max_time: 10, threads_num: 128, file_total_size: "1GB", file_test_mode: "rndrw", file_max_time: 60, file_max_requests: 0 }
+  "web-benchmark":
+    repeat: 1
+    setup:
+      - { threads: 12, connections: 24, time: 30 }
+  "nench-benchmark":
+    repeat: 1
+    setup:
+      - {}

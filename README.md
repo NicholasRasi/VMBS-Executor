@@ -1,5 +1,8 @@
 # Cloud Benchmark
-A suite of benchmarks for cloud providers
+A suite of benchmarks for cloud providers.
+
+This component run the benchmark specified in the configuration file using the Randomized Multiple Interleaved Trials
+(RMIT) strategy. The result is saved to a file. 
 
 ## Usage
 ```python
