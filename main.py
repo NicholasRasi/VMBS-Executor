@@ -8,13 +8,15 @@ import datetime
 from benchmarks.benchmarks import get_benchmark_class
 from benchmarks.server import Server
 
+CONFIG_FILE = "config_benchmark.yml"
+
 # setup logger
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='DEBUG', milliseconds=False, logger=logger)
 logger.info("Start cloud benchmark")
 
 # read configuration file
-with open("config.yml", 'r') as file:
+with open(CONFIG_FILE, 'r') as file:
     data = file.read()
     config = yaml.load(data, Loader=yaml.FullLoader)
 
@@ -29,6 +31,7 @@ for benchmark_name in benchmarks.keys():
     benchmark_class = get_benchmark_class(benchmark_name)
     logger.info("Adding " + benchmark_name + " with: " + str(benchmarks[benchmark_name]["setup"]))
     for repeat in range(benchmarks[benchmark_name]["repeat"]):
+        logger.info("repeat:" + str(repeat))
         for setup in benchmarks[benchmark_name]["setup"]:
             benchmark = benchmark_class(logger=logger)
             benchmark.setup(setup)
@@ -57,6 +60,7 @@ benchmark_result = {"time": str(datetime.datetime.now()),
                     "benchmarks": benchmark_results}
 
 # save to file
+logger.info("Benchmark finished, saving to file...")
 with open('benchmark_result', 'w') as outfile:
     json.dump(benchmark_result, outfile)
-
+logger.info("Exiting")
