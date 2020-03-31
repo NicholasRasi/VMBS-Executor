@@ -31,7 +31,6 @@ for benchmark_name in benchmarks.keys():
     benchmark_class = get_benchmark_class(benchmark_name)
     logger.info("Adding " + benchmark_name + " with: " + str(benchmarks[benchmark_name]["setup"]))
     for repeat in range(benchmarks[benchmark_name]["repeat"]):
-        logger.info("repeat:" + str(repeat))
         for setup in benchmarks[benchmark_name]["setup"]:
             benchmark = benchmark_class(logger=logger)
             benchmark.setup(setup)
