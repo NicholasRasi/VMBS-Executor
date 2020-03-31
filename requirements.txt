@@ -1,6 +1,5 @@
 coloredlogs
 sh
-tensorflow
 flask
 gunicorn
 pyyaml
