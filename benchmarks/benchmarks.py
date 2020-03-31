@@ -3,7 +3,6 @@ import time
 import statistics
 from benchmarks.wrapper import Wrapper
 from math import sin, cos, radians
-from ai_benchmark import AIBenchmark
 from .python_sysbench import Sysbench
 
 
@@ -102,37 +101,6 @@ class CPUBenchmark(Benchmark):
         except Exception as e:
             retcode, output = self.error_code, str(e)
         self.result = {"retcode": retcode, "output": output}
-
-        self.post()
-        return self.result
-
-
-class AIABenchmark(Benchmark):
-    """
-    AI Benchmark Alpha is an open source python library for evaluating AI performance of various hardware platforms
-    https://pypi.org/project/ai-benchmark/
-    """
-    name = 'ai-benchmark'
-
-    def run(self):
-        self.pre()
-
-        try:
-            benchmark = AIBenchmark()
-            if self.setup["type"] == "inference":
-                ai_results = benchmark.run_inference()
-            elif self.setup["type"] == "training":
-                ai_results = benchmark.run_training()
-            elif self.setup["type"] == "micro":
-                ai_results = benchmark.run_micro()
-            else:
-                ai_results = benchmark.run()
-            self.result = {"retcode": self.succ_code,
-                           "output": {"ai_score": ai_results.ai_score,
-                                      "inference_score": ai_results.inference_score,
-                                      "training_score": ai_results.training_score}}
-        except Exception as e:
-            self.result = {"retcode": self.error_code, "output": str(e)}
 
         self.post()
         return self.result
