@@ -184,5 +184,5 @@ def get_benchmark_class(name):
     return list(filter(lambda bench: bench.name == name, BENCHMARKS))[0]
 
 
-BENCHMARKS = [DDBenchmark, DownloadBenchmark, CPUBenchmark, AIABenchmark, SysBenchmark, WebServerBenchmark,
+BENCHMARKS = [DDBenchmark, DownloadBenchmark, CPUBenchmark, SysBenchmark, WebServerBenchmark,
               NenchBenchmark]
