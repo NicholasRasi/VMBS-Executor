@@ -26,7 +26,7 @@ benchmarks_list = []
 benchmarks = config["benchmarks"]
 logger.info("Running benchmarks: " + ", ".join(benchmarks.keys()))
 
-# set up benchmarks
+# set up benchmarks using the Randomized Multiple Trials (RMT) methodology
 for benchmark_name in benchmarks.keys():
     benchmark_class = get_benchmark_class(benchmark_name)
     logger.info("Adding " + benchmark_name + " with: " + str(benchmarks[benchmark_name]["setup"]))
