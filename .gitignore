@@ -134,6 +134,8 @@ dmypy.json
 # pytype static type analyzer
 .pytype/
 
+# other
+.gitignore
 .idea/
 other/
 config_benchmark.yml
