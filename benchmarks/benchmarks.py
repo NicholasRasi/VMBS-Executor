@@ -89,14 +89,15 @@ class CPUBenchmark(Benchmark):
 
         try:
             durations = []
-            start = time.time()
-            product = 1.0
-            for counter in range(1, 1000, 1):
-                for dex in list(range(1, 360, 1)):
-                    angle = radians(dex)
-                    product *= sin(angle) ** 2 + cos(angle) ** 2
-            end = time.time()
-            durations.append(end - start)
+            for r in range(1, 10):
+                start = time.time()
+                product = 1.0
+                for counter in range(1, 1000, 1):
+                    for dex in list(range(1, 360, 1)):
+                        angle = radians(dex)
+                        product *= sin(angle) ** 2 + cos(angle) ** 2
+                end = time.time()
+                durations.append(end - start)
             retcode, output = self.succ_code, statistics.mean(durations)
         except Exception as e:
             retcode, output = self.error_code, str(e)
