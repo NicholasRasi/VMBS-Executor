@@ -1,4 +1,4 @@
-# VMBS - Executor
+# VMBS-tool - Executor
 A suite of benchmarks for monitoring performance of cloud virtual machines (VMs).
 
 This component runs the benchmark specified in the configuration file using the Randomized Multiple Trials (RMT) methodology, a simpler version of the [Randomized Multiple Interleaved Trials (RMIT)](https://doi.org/10.1145/3030207.3030229) approach. The results are saved into the  ```benchmark_result``` file along with information about the server. 
